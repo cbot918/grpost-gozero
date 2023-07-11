@@ -2,8 +2,10 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/cbot918/liby/util"
 	_ "github.com/go-sql-driver/mysql"
@@ -17,6 +19,15 @@ const (
 
 var log = fmt.Println
 var logf = fmt.Printf
+
+var logj = func(v any) error {
+	result, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		return err
+	}
+	log(string(result))
+	return nil
+}
 
 func InsertUserObj(users []User) {
 	if len(users) == 0 {
@@ -44,17 +55,17 @@ func InsertPostObj(posts []Post) {
 	var stmt string
 	/* insert posts table*/
 	stmt = GetCatStmtPosts(posts, "posts")
-	log(stmt)
+	logj(stmt)
 	execInsert(stmt)
 
 	/* insert post_like table*/
 	stmt = GetCatStmtPosts(posts, "post_like")
-	log(stmt)
+	logj(stmt)
 	execInsert(stmt)
 
 	/* insert comments table*/
 	stmt = GetCatStmtPosts(posts, "comments")
-	log(stmt)
+	logj(stmt)
 	execInsert(stmt)
 
 }
@@ -65,14 +76,14 @@ func GetCatStmtPosts(posts []Post, tableType string) (str string) {
 		{
 			str = "INSERT INTO posts (id, title, body, posted_by, photo, created_at, updated_at) VALUES"
 			for _, post := range posts {
-				str += fmt.Sprintf("((UNHEX('%s'), '%s', '%s', (UNHEX('%s'), '%s', '%s','%s'),",
+				str += fmt.Sprintf("(UNHEX('%s'), '%s', '%s', UNHEX('%s'), '%s', '%s','%s'),",
 					util.GetUuidFill(post.ID.Oid, 32),
 					post.Title,
 					post.Body,
 					util.GetUuidFill(post.PostedBy.Oid, 32),
 					post.Photo,
-					util.GetParsedTime(post.CreatedAt.Date.String()),
-					util.GetParsedTime(post.UpdatedAt.Date.String()),
+					GetConvertedTime(util.GetParsedTime(post.CreatedAt.Date.String())),
+					GetConvertedTime(util.GetParsedTime(post.UpdatedAt.Date.String())),
 				)
 			}
 			str = str[:len(str)-1]
@@ -84,7 +95,7 @@ func GetCatStmtPosts(posts []Post, tableType string) (str string) {
 			for _, post := range posts {
 				if len(post.Likes) > 0 {
 					for _, like := range post.Likes {
-						str += fmt.Sprintf("((UNHEX('%s'), (UNHEX('%s')),",
+						str += fmt.Sprintf("(UNHEX('%s'), UNHEX('%s')),",
 							util.GetUuidFill(like.Oid, 32),
 							util.GetUuidFill(post.ID.Oid, 32),
 						)
@@ -100,7 +111,7 @@ func GetCatStmtPosts(posts []Post, tableType string) (str string) {
 			for _, post := range posts {
 				if len(post.Comments) > 0 {
 					for _, comment := range post.Comments {
-						str += fmt.Sprintf("((UNHEX('%s'), '%s', (UNHEX('%s'), (UNHEX('%s')),",
+						str += fmt.Sprintf("(UNHEX('%s'), '%s', UNHEX('%s'), UNHEX('%s')),",
 							util.GetUuidFill(comment.ID.Oid, 32),
 							comment.Text,
 							util.GetUuidFill(comment.PostedBy.Oid, 32),
@@ -120,7 +131,7 @@ func GetCatStmt(users []User, tableType string) (str string) {
 	switch tableType {
 	case "users":
 		{
-			str = "INSERT INTO users (id, email, name, password, pic) VALUES"
+			str = "INSERT INTO users (id, email, name, password, pic) VALUES "
 			for _, user := range users {
 				str += fmt.Sprintf("(UNHEX('%s'),'%s','%s','%s','%s'),", util.GetUuidFill(user.ID.Oid, 32), user.Email, user.Name, user.Password, user.Pic)
 			}
@@ -129,16 +140,16 @@ func GetCatStmt(users []User, tableType string) (str string) {
 		}
 	case "follow":
 		{
-			str = "INSERT INTO follow (from_user,to_user) VALUES"
+			str = "INSERT INTO follow (from_user,to_user) VALUES "
 			for _, user := range users {
 				if len(user.Followers) > 0 {
 					for _, follower := range user.Followers {
-						str += fmt.Sprintf("((UNHEX('%s'),(UNHEX('%s')),", util.GetUuidFill(user.ID.Oid, 32), util.GetUuidFill(follower.Oid, 32))
+						str += fmt.Sprintf("(UNHEX('%s'),UNHEX('%s')),", util.GetUuidFill(user.ID.Oid, 32), util.GetUuidFill(follower.Oid, 32))
 					}
 				}
 				if len(user.Following) > 0 {
 					for _, following := range user.Following {
-						str += fmt.Sprintf("((UNHEX('%s'),(UNHEX('%s')),", util.GetUuidFill(following.Oid, 32), util.GetUuidFill(user.ID.Oid, 32))
+						str += fmt.Sprintf("(UNHEX('%s'),UNHEX('%s')),", util.GetUuidFill(following.Oid, 32), util.GetUuidFill(user.ID.Oid, 32))
 					}
 				}
 			}
@@ -186,4 +197,14 @@ func setupDb(dburl string) *sqlx.DB {
 		panic(err)
 	}
 	return db
+}
+
+func GetConvertedTime(input string) string {
+	originLayout := "2006-01-02 15:04:05.99Z"
+	desiredLayout := "2006-01-02 15:04:05"
+	parsedTime, err := time.Parse(originLayout, input)
+	if err != nil {
+		return ""
+	}
+	return parsedTime.Format(desiredLayout)
 }
