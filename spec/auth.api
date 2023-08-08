@@ -1,0 +1,31 @@
+type SigninRequest {
+	Email    string    `json:"email"`
+	Password string 	`json:"password"`
+}
+
+type SigninResponse {
+	Message   string `json:"message"`
+	Nama      string `json:"name"`
+	Email     string `json:"email"`
+	Token     string `json:"token"`
+	CreatedAt string `json:"created_at"`
+}
+
+type SignupRequest {
+	Email string `json:"email"`
+}
+
+type SignupResponse {
+	Message string `json:"message"`
+}
+
+@server(
+	group:auth
+)
+
+service auth-api {
+	@handler SigninHandler
+	post /auth/signin(SigninRequest) returns (SigninResponse)
+	@handler SignupHandler
+	post /auth/signup(SignupRequest) returns (SignupResponse)
+}

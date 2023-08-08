@@ -3,7 +3,7 @@ package handler
 
 import (
 	"net/http"
-
+	auth "users/internal/handler/auth"
 	user "users/internal/handler/user"
 	"users/internal/svc"
 	health "users/internal/handler/health"
@@ -27,6 +27,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/ping",
 				Handler: health.HealthHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/auth/signin",
+				Handler: auth.SigninHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/auth/signup",
+				Handler: auth.SignupHandler(serverCtx),
 			},
 		},
 	)

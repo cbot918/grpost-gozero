@@ -24,3 +24,24 @@ type PingRequest struct {
 type PingResponse struct {
 	Message string `json:"message"`
 }
+
+type SigninRequest struct {
+	Email    string    `json:"email"`
+	Password string `json:"password"`
+}
+
+type SigninResponse struct {
+	Message   string `json:"message"`
+	Nama      string `json:"name"`
+	Email     string `json:"email"`
+	Token     string `json:"token"`
+	CreatedAt string `json:"created_at"`
+}
+
+type SignupRequest struct {
+	Email string `json:"email"`
+}
+
+type SignupResponse struct {
+	Message string `json:"message"`
+}

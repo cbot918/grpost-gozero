@@ -30,7 +30,7 @@ func (l *UsersLogic) Users(req *types.Request) (resp *types.Response, err error)
 
 	fmt.Println("hihi")
 
-	user, err := l.svcCtx.UserModel.FindOne(l.ctx, 1)
+	user, err := l.svcCtx.UserModel.FindOne(l.ctx, "1")
 	if err != nil && err != model.ErrNotFound {
 		return nil, errors.New("failed")
 	}

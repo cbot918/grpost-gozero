@@ -27,7 +27,6 @@ func (l *HealthLogic) Health(req *types.PingRequest) (resp *types.PingResponse, 
 
 	res := &types.PingResponse{}
 	_, err = l.svcCtx.UserModel.Ping()
-
 	if err != nil {
 		res.Message = "db down"
 	}
