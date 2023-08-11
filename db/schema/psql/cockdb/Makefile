@@ -1,6 +1,6 @@
 dump-grpost:
-	docker exec -it grpost pg_dump -U postgres -d grpost --data-only --table=users -f users.sql
-	docker cp grpost:/users.sql .
+	docker exec -it grpost pg_dump -U postgres -d grpost --data-only --table=comments -f comments.sql
+	docker cp grpost:/comments.sql .
 
 dump-cockdb:
 	docker run -it --rm --network bridge postgres pg_dump -h yale918-5707.8nk.cockroachlabs.cloud:26257 -U yale918 -d defaultdb -f grpost.sql

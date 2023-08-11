@@ -1,0 +1,63 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.15 (Debian 12.15-1.pgdg120+1)
+-- Dumped by pg_dump version 12.15 (Debian 12.15-1.pgdg120+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Data for Name: follow; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.follow (id, from_user, to_user) FROM stdin;
+1	60cca023-6684-bf1e-5c6f-068600000000	60e2ad5d-a6d3-6600-22f0-35e900000000
+2	60ccae67-fcd2-c732-9ca3-96c000000000	60ce798f-7a1d-c200-222f-5ca200000000
+3	60ccae67-fcd2-c732-9ca3-96c000000000	6100b08c-e100-d700-2282-1b7600000000
+4	60ccae67-fcd2-c732-9ca3-96c000000000	612888f2-50c6-4200-223f-af0800000000
+5	60ccae67-fcd2-c732-9ca3-96c000000000	61512c52-aca8-e600-221d-bd9a00000000
+6	60cd8c80-ba2b-ee00-226f-847100000000	60ccae67-fcd2-c732-9ca3-96c000000000
+7	60ce798f-7a1d-c200-222f-5ca200000000	60ccae67-fcd2-c732-9ca3-96c000000000
+8	60f5101e-eeb7-3700-225b-265600000000	60ccae67-fcd2-c732-9ca3-96c000000000
+9	60e93dc3-ef00-1f00-22bb-80cd00000000	60ccae67-fcd2-c732-9ca3-96c000000000
+10	60f5255f-eeb7-3700-225b-266b00000000	60ccae67-fcd2-c732-9ca3-96c000000000
+11	61512c52-aca8-e600-221d-bd9a00000000	60ccae67-fcd2-c732-9ca3-96c000000000
+12	60ccd50a-2148-2500-2271-b4af00000000	60ccd50a-2148-2500-2271-b4af00000000
+13	60ccd50a-2148-2500-2271-b4af00000000	60ccd50a-2148-2500-2271-b4af00000000
+14	60cd8c80-ba2b-ee00-226f-847100000000	60ccae67-fcd2-c732-9ca3-96c000000000
+15	60ce798f-7a1d-c200-222f-5ca200000000	60ccae67-fcd2-c732-9ca3-96c000000000
+16	60ccae67-fcd2-c732-9ca3-96c000000000	60ce798f-7a1d-c200-222f-5ca200000000
+17	60cca023-6684-bf1e-5c6f-068600000000	60e2ad5d-a6d3-6600-22f0-35e900000000
+18	60e966eb-d446-8d00-22ee-0e4e00000000	60e301f9-85f2-f000-22b8-613800000000
+19	60e93dc3-ef00-1f00-22bb-80cd00000000	60ccae67-fcd2-c732-9ca3-96c000000000
+20	60e966eb-d446-8d00-22ee-0e4e00000000	60e301f9-85f2-f000-22b8-613800000000
+21	60f5101e-eeb7-3700-225b-265600000000	60ccae67-fcd2-c732-9ca3-96c000000000
+22	60f5255f-eeb7-3700-225b-266b00000000	60ccae67-fcd2-c732-9ca3-96c000000000
+23	60ccae67-fcd2-c732-9ca3-96c000000000	6100b08c-e100-d700-2282-1b7600000000
+24	60ccae67-fcd2-c732-9ca3-96c000000000	612888f2-50c6-4200-223f-af0800000000
+25	61512c52-aca8-e600-221d-bd9a00000000	60ccae67-fcd2-c732-9ca3-96c000000000
+26	60ccae67-fcd2-c732-9ca3-96c000000000	61512c52-aca8-e600-221d-bd9a00000000
+\.
+
+
+--
+-- Name: follow_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.follow_id_seq', 26, true);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

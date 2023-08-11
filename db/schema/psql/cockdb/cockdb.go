@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
@@ -19,16 +20,34 @@ func readFile(path string) (string, error) {
 
 }
 
+var lg = fmt.Println
+
 func main() {
-	query, err := readFile("backup.sql")
+	content, err := readFile("one.inst")
 	if err != nil {
 		log.Fatal(err)
 	}
-	dsn := ""
+
+	s := strings.Split(content, "	")
+
+	lg(s)
+
+	dsn := "postgresql://postgres:GzlrwXvXWFpGQDedNDBtCQ@yale918-5707.8nk.cockroachlabs.cloud:26257/grpost?sslmode=verify-full"
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		log.Fatal("failed to connect database", err)
 	}
+	// err = db.Ping()
+	// if err != nil {
+	// 	log.Fatal("ping failed")
+	// }
+	// fmt.Println("ping success")
+
+	// n, err := strconv.ParseInt(s[0], 10, 64)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	query := fmt.Sprintf("insert into comments(id, texts, posted_by, target_post) values('%s','%s','%s','%s')", s[0], s[1], s[2], s[3])
 
 	_, err = db.Exec(string(query))
 	if err != nil {
@@ -49,12 +68,6 @@ func main() {
 	// if err != nil {
 	// 	log.Fatal("failed to execute query", err)
 	// }
-
-	// err = db.Ping()
-	// if err != nil {
-	// 	log.Fatal("ping failed")
-	// }
-	// fmt.Println("ping success")
 
 	// fmt.Println(now)
 }
